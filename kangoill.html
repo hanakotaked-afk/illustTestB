@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>看護講座イラスト — NLC講座イラストアーカイブ</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:#FAFAF9;font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;color:#2C2C2A;}
+
+    /* Nav */
+    nav{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;background:#FAFAF9;border-bottom:0.5px solid #E8E6E0;}
+    .nav-logo{font-size:16px;font-weight:500;color:#2C2C2A;letter-spacing:-0.01em;text-decoration:none;}
+    .nav-logo span{color:#534AB7;}
+    .nav-back{display:flex;align-items:center;gap:6px;font-size:13px;color:#888780;cursor:pointer;text-decoration:none;transition:color 0.2s;}
+    .nav-back:hover{color:#534AB7;}
+
+    /* Header */
+    .page-header{padding:48px 32px 40px;border-bottom:0.5px solid #E8E6E0;}
+    .page-header-eyebrow{font-size:11px;font-weight:500;letter-spacing:0.1em;color:#534AB7;margin-bottom:10px;}
+    .page-header-title{font-size:28px;font-weight:500;color:#2C2C2A;letter-spacing:-0.02em;line-height:1.2;margin-bottom:8px;}
+    .page-header-meta{font-size:13px;color:#888780;}
+
+    /* Grid */
+    .gallery-wrap{padding:40px 32px 64px;}
+    .gallery-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+    }
+    .gallery-item{
+      background:#FFFFFF;
+      border-radius:14px;
+      overflow:hidden;
+      cursor:pointer;
+      box-shadow:0 4px 12px rgba(0,0,0,0.05);
+      transition:transform 0.3s ease, box-shadow 0.3s ease;
+      aspect-ratio:1/1;
+      position:relative;
+    }
+    .gallery-item:hover{
+      transform:translateY(-4px);
+      box-shadow:0 8px 20px rgba(83,74,183,0.15);
+    }
+    .gallery-item img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      transition:transform 0.6s ease;
+    }
+    .gallery-item:hover img{
+      transform:scale(1.06);
+    }
+    .gallery-overlay{
+      position:absolute;inset:0;
+      background:rgba(28,28,26,0.72);
+      display:flex;align-items:center;justify-content:center;
+      padding:16px;
+      opacity:0;
+      transition:opacity 0.3s ease;
+      pointer-events:none;
+    }
+    .gallery-item:hover .gallery-overlay{
+      opacity:1;
+    }
+    .gallery-overlay-text{
+      color:#fff;
+      font-size:12px;
+      line-height:1.6;
+      text-align:center;
+    }
+
+    /* Lightbox */
+    .lb-overlay{
+      display:none;
+      position:fixed;inset:0;
+      background:rgba(28,28,26,0.88);
+      z-index:1000;
+      align-items:center;
+      justify-content:center;
+      padding:32px;
+      backdrop-filter:blur(6px);
+      -webkit-backdrop-filter:blur(6px);
+    }
+    .lb-overlay.open{display:flex;}
+    .lb-inner{
+      position:relative;
+      max-width:min(780px,90vw);
+      max-height:82vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .lb-inner img{
+      max-width:100%;
+      max-height:82vh;
+      border-radius:16px;
+      box-shadow:0 24px 60px rgba(0,0,0,0.4);
+      display:block;
+    }
+    .lb-close{
+      position:fixed;top:24px;right:28px;
+      width:40px;height:40px;border-radius:50%;
+      background:rgba(255,255,255,0.12);
+      border:none;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;
+      transition:background 0.2s;
+    }
+    .lb-close:hover{background:rgba(255,255,255,0.22);}
+    .lb-arrow{
+      position:fixed;
+      top:50%;transform:translateY(-50%);
+      width:44px;height:44px;border-radius:50%;
+      background:rgba(255,255,255,0.12);
+      border:none;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;
+      transition:background 0.2s;
+    }
+    .lb-arrow:hover{background:rgba(255,255,255,0.22);}
+    .lb-prev{left:20px;}
+    .lb-next{right:20px;}
+    .lb-footer{
+      position:fixed;bottom:0;left:0;right:0;
+      padding:20px 80px;
+      display:flex;align-items:center;justify-content:space-between;
+      gap:24px;
+    }
+    .lb-caption{
+      font-size:13px;color:rgba(255,255,255,0.75);
+      line-height:1.6;flex:1;
+    }
+    .lb-counter{
+      font-size:12px;color:rgba(255,255,255,0.4);
+      letter-spacing:0.05em;white-space:nowrap;
+    }
+
+    /* CTA */
+    .cta-band{padding:48px 32px;background:#2C2C2A;display:flex;align-items:center;justify-content:space-between;}
+    .cta-band-title{font-size:20px;font-weight:500;color:#F1EFE8;margin-bottom:6px;}
+    .cta-band-sub{font-size:13px;color:#888780;line-height:1.6;}
+    .cta-btn{font-size:13px;font-weight:500;padding:12px 28px;background:#534AB7;color:#EEEDFE;border-radius:8px;cursor:pointer;white-space:nowrap;border:none;}
+
+    /* Footer */
+    footer{padding:24px 32px;display:flex;align-items:center;justify-content:space-between;border-top:0.5px solid #E8E6E0;background:#FAFAF9;}
+
+    @media (max-width: 600px) {
+      nav{padding:14px 16px;}
+      .nav-back span{display:none;}
+      .page-header{padding:32px 16px 28px;}
+      .page-header-title{font-size:22px;}
+      .gallery-wrap{padding:24px 16px 48px;}
+      .gallery-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+      .tab-bar{padding:0 16px;}
+      .tab-btn{padding:11px 12px;font-size:12px;}
+      .lb-overlay{padding:16px;}
+      .lb-inner{max-width:100%;max-height:72vh;}
+      .lb-inner img{max-height:72vh;}
+      .lb-close{top:12px;right:12px;width:36px;height:36px;}
+      .lb-arrow{top:auto;transform:none;bottom:48px;width:48px;height:48px;}
+      .lb-prev{left:calc(50% - 60px);}
+      .lb-next{right:calc(50% - 60px);}
+      .lb-counter{bottom:16px;}
+      .lb-footer{padding:12px 16px;bottom:0;flex-direction:column;gap:4px;align-items:flex-start;}
+      .lb-caption{font-size:11px;}
+      .cta-band{flex-direction:column;align-items:flex-start;gap:20px;padding:32px 16px;}
+      footer{padding:16px;}
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-logo" href="index.html">DXdesign<span>works</span></a>
+    <a class="nav-back" href="index.html">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8L10 4" stroke="#888780" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      アーカイブトップへ戻る
+    </a>
+  </nav>
+
+  <div class="page-header">
+    <div class="page-header-eyebrow">ILLUSTRATION FOR EDUCATION &amp; PUBLISHING</div>
+    <div class="page-header-title">看護講座イラスト</div>
+    <div class="page-header-meta">26点</div>
+  </div>
+
+  <div class="gallery-wrap">
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </div>
+
+  <div class="cta-band">
+    <div>
+      <div class="cta-band-title">作品のご利用・ご依頼はこちら</div>
+      <div class="cta-band-sub">新規のデジタル教材向けのイラスト制作を承っています。<br>お気軽にご相談ください。</div>
+    </div>
+    <button class="cta-btn">お問い合わせフォームへ</button>
+  </div>
+
+  <footer>
+    <div></div>
+    <div style="font-size:12px;color:#B4B2A9;">© 2026 DX design</div>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lb-overlay" id="lightbox">
+    <button class="lb-close" id="lbClose" aria-label="閉じる">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 4L14 14M14 4L4 14" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+    <button class="lb-arrow lb-prev" id="lbPrev" aria-label="前へ">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 14L7 9L11 4" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="lb-inner">
+      <img id="lbImg" src="" alt="">
+    </div>
+    <button class="lb-arrow lb-next" id="lbNext" aria-label="次へ">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 4L11 9L7 14" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="lb-footer">
+      <div class="lb-caption" id="lbCaption"></div>
+      <div class="lb-counter" id="lbCounter"></div>
+    </div>
+  </div>
+
+  <script>
+    const IMAGES = [
+      { thumb: 'thumb_kango01.webp', full: 'kango01.webp', title: '腰椎穿刺を行う際の体位', caption: '腰椎穿刺を行う際の体位の解説。Aが正解' },
+      { thumb: 'thumb_kango02.webp', full: 'kango02.webp', title: '包帯法', caption: '包帯法の解説で使用する包帯の巻き方の図' },
+      { thumb: 'thumb_kango03.webp', full: 'kango03.webp', title: '水封ドレーンの模型', caption: '胸腔ドレナージの管理の解説で使用する水封ドレーンの模型' },
+      { thumb: 'thumb_kango04.webp', full: 'kango04.webp', title: '気管内吸引', caption: '気管内吸引を行う時のカテーテルの操作の解説。②が正解' },
+      { thumb: 'thumb_kango05.webp', full: 'kango05.webp', title: 'スタンダードプリコーション', caption: 'スタンダードプリコーションの解説で使用する手洗い時の確認の図' },
+      { thumb: 'thumb_kango06.webp', full: 'kango06.webp', title: '虚血性心疾患', caption: '虚血性心疾患の解説' },
+      { thumb: 'thumb_kango07.webp', full: 'kango07.webp', title: 'リンパ系幹細胞', caption: 'リンパ系幹細胞から分化する解説図' },
+      { thumb: 'thumb_kango08.webp', full: 'kango08.webp', title: '血液凝固', caption: '血液凝固に関与する血液凝固因子の解説図' },
+      { thumb: 'thumb_kango09.webp', full: 'kango09.webp', title: '骨格筋', caption: '骨格筋の微細構造の図' },
+      { thumb: 'thumb_kango10.webp', full: 'kango10.webp', title: '表在感覚', caption: '表在感覚、痛覚・触覚・圧覚の解説図' },
+      { thumb: 'thumb_kango11.webp', full: 'kango11.webp', title: '門脈の末梢枝', caption: '門脈の末梢枝の解説図' },
+      { thumb: 'thumb_kango12.webp', full: 'kango12.webp', title: '手術体位とその影響', caption: '手術体位での固定の図。図の中に間違いがあり、それを答える' },
+      { thumb: 'thumb_kango13.webp', full: 'kango13.webp', title: '胎位胎向', caption: '胎児心音の聴取部位の図、最も適切な聴取部位を答える' },
+      { thumb: 'thumb_kango14.webp', full: 'kango14.webp', title: 'レオポルド触診法', caption: 'レオポルド触診法の図' },
+      { thumb: 'thumb_kango15.webp', full: 'kango15.webp', title: '母性看護学追加', caption: '母性看護学追加' },
+      { thumb: 'thumb_kango16.webp', full: 'kango16.webp', title: 'スワン-ガンツカテーテル', caption: 'スワン-ガンツカテーテルの図' },
+      { thumb: 'thumb_kango17.webp', full: 'kango17.webp', title: 'ウォータートラップ', caption: '人工呼吸器の回路の途中に水滴を集める装置をウォータートラップという' },
+      { thumb: 'thumb_kango18.webp', full: 'kango18.webp', title: '慢性肺気腫', caption: '慢性肺気腫の図' },
+      { thumb: 'thumb_kango19.webp', full: 'kango19.webp', title: '褥瘡分類方法', caption: '褥瘡の深さの分類。ステージⅠからステージⅣ' },
+      { thumb: 'thumb_kango20.webp', full: 'kango20.webp', title: '小児の処置に対する援助', caption: '点滴施注時の援助方法' },
+      { thumb: 'thumb_kango22.webp', full: 'kango22.webp', title: 'ポルトバックの携帯', caption: 'ポルトバックをポシェットに入れて携帯している図' },
+      { thumb: 'thumb_kango23.webp', full: 'kango23.webp', title: '母乳育児', caption: '乳房の型に合った授乳方法' },
+      { thumb: 'thumb_kango24.webp', full: 'kango24.webp', title: '乳房のタイプ', caption: '乳房の形' },
+      { thumb: 'thumb_kango25.webp', full: 'kango25.webp', title: 'ラクナ梗塞', caption: 'ラクナ梗塞の図' },
+      { thumb: 'thumb_kango26.webp', full: 'kango26.webp', title: '前立腺がんの手術', caption: '前立腺がんの手術' },
+      { thumb: 'thumb_kango27.webp', full: 'kango27.webp', title: '白内障', caption: '白内障による水晶体が混濁する図' },
+    ];
+
+    const TOTAL = IMAGES.length;
+
+    // グリッド生成
+    const grid = document.getElementById('galleryGrid');
+    IMAGES.forEach((img, i) => {
+      const item = document.createElement('div');
+      item.className = 'gallery-item';
+      item.innerHTML = `<img src="${img.thumb}" alt="看護講座イラスト${i+1}" loading="lazy"><div class="gallery-overlay"><div class="gallery-overlay-text">${img.title}</div></div>`;
+      item.addEventListener('click', () => openLightbox(i));
+      grid.appendChild(item);
+    });
+
+    // ライトボックス
+    let current = 0;
+    const lb      = document.getElementById('lightbox');
+    const lbImg   = document.getElementById('lbImg');
+    const lbCaption = document.getElementById('lbCaption');
+    const lbCounter = document.getElementById('lbCounter');
+
+    function openLightbox(index) {
+      current = index;
+      updateLightbox();
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      lb.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function updateLightbox() {
+      lbImg.src = IMAGES[current].full;
+      lbCaption.textContent = IMAGES[current].caption;
+      lbCounter.textContent = `${current + 1} / ${TOTAL}`;
+    }
+
+    document.getElementById('lbClose').addEventListener('click', closeLightbox);
+    document.getElementById('lbPrev').addEventListener('click', () => {
+      current = (current - 1 + TOTAL) % TOTAL;
+      updateLightbox();
+    });
+    document.getElementById('lbNext').addEventListener('click', () => {
+      current = (current + 1) % TOTAL;
+      updateLightbox();
+    });
+    lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+    document.addEventListener('keydown', e => {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'ArrowLeft')  { current = (current - 1 + TOTAL) % TOTAL; updateLightbox(); }
+      if (e.key === 'ArrowRight') { current = (current + 1) % TOTAL; updateLightbox(); }
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
+
+</body>
+</html>
