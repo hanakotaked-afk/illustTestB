@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>キャラクター紹介（横スクロール型）— NLC講座イラストアーカイブ</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:#FAFAF9;font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;color:#2C2C2A;}
+
+    /* Nav */
+    nav{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;background:#FAFAF9;border-bottom:0.5px solid #E8E6E0;position:sticky;top:0;z-index:100;}
+    .nav-logo{font-size:16px;font-weight:500;color:#2C2C2A;letter-spacing:-0.01em;text-decoration:none;}
+    .nav-logo span{color:#534AB7;}
+    .nav-back{display:flex;align-items:center;gap:6px;font-size:13px;color:#888780;text-decoration:none;transition:color 0.2s;}
+    .nav-back:hover{color:#534AB7;}
+
+    /* Page Header */
+    .page-header{padding:48px 32px 40px;border-bottom:0.5px solid #E8E6E0;}
+    .page-header-eyebrow{font-size:11px;font-weight:500;letter-spacing:0.1em;color:#534AB7;margin-bottom:10px;}
+    .page-header-title{font-size:28px;font-weight:500;color:#2C2C2A;letter-spacing:-0.02em;line-height:1.2;}
+
+    /* Section */
+    .section{padding:48px 0;border-bottom:0.5px solid #E8E6E0;}
+    .section-header{padding:0 32px;margin-bottom:28px;display:flex;align-items:center;gap:14px;}
+    .section-label{
+      display:inline-flex;align-items:center;
+      font-size:11px;font-weight:500;letter-spacing:0.08em;color:#534AB7;
+      background:#EEEDFE;padding:4px 12px;border-radius:20px;
+      text-decoration:none;
+      transition:background 0.2s, color 0.2s;
+    }
+    .section-label:hover{background:#534AB7;color:#fff;}
+    .section-count{font-size:12px;color:#B4B2A9;}
+
+    /* Horizontal scroll track */
+    .scroll-track{
+      display:flex;
+      gap:16px;
+      padding:8px 32px 24px;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:none;
+    }
+    .scroll-track::-webkit-scrollbar{display:none;}
+
+    /* Character card */
+    .chara-card{
+      flex-shrink:0;
+      width:220px;
+      scroll-snap-align:start;
+      background:#FFFFFF;
+      border-radius:16px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.05);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      transition:transform 0.3s ease, box-shadow 0.3s ease;
+      cursor:default;
+    }
+    .chara-card:hover{
+      transform:none;
+      box-shadow:0 4px 12px rgba(0,0,0,0.05);
+    }
+    .chara-card.wide{width:360px;}
+
+    /* 画像エリア */
+    .chara-img{
+      background:#F0EFED;
+      height:260px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      padding:0 20px;
+      overflow:hidden;
+    }
+    .chara-img img{
+      max-height:240px;
+      width:auto;
+      max-width:100%;
+      object-fit:contain;
+      display:block;
+    }
+    .chara-card.wide .chara-img img{max-width:100%;width:100%;object-fit:cover;height:240px;}
+
+    /* テキストエリア */
+    .chara-body{padding:20px;flex:1;}
+    .chara-role{font-size:10px;font-weight:500;color:#888780;letter-spacing:0.08em;margin-bottom:4px;}
+    .chara-name{font-size:16px;font-weight:500;color:#2C2C2A;line-height:1.4;margin-bottom:2px;}
+    .chara-name-sub{font-size:12px;color:#B4B2A9;margin-bottom:10px;}
+    .chara-desc{font-size:12px;color:#555451;line-height:1.8;border-top:0.5px solid #F0EFED;padding-top:10px;}
+    .chara-desc li{list-style:none;padding-left:1em;position:relative;}
+    .chara-desc li::before{content:"―";position:absolute;left:0;color:#C8C6BE;}
+
+    /* Scroll hint fade */
+    .scroll-wrap{position:relative;}
+    .scroll-wrap::after{
+      content:'';
+      position:absolute;top:0;right:0;
+      width:60px;height:100%;
+      background:linear-gradient(to right, transparent, #FAFAF9);
+      pointer-events:none;
+    }
+
+    /* CTA */
+    .cta-band{padding:48px 32px;background:#2C2C2A;display:flex;align-items:center;justify-content:space-between;}
+    .cta-band-title{font-size:20px;font-weight:500;color:#F1EFE8;margin-bottom:6px;}
+    .cta-band-sub{font-size:13px;color:#888780;line-height:1.6;}
+    .cta-btn{font-size:13px;font-weight:500;padding:12px 28px;background:#534AB7;color:#EEEDFE;border-radius:8px;cursor:pointer;white-space:nowrap;border:none;flex-shrink:0;}
+
+    /* Footer */
+    footer{padding:24px 32px;display:flex;align-items:center;justify-content:space-between;border-top:0.5px solid #E8E6E0;background:#FAFAF9;}
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      nav{padding:14px 16px;}
+      .nav-back span{display:none;}
+      .page-header{padding:32px 16px 28px;}
+      .page-header-title{font-size:22px;}
+      .section{padding:32px 0;}
+      .section-header{padding:0 16px;}
+      .scroll-track{padding:8px 16px 20px;gap:12px;}
+      .chara-card{width:180px;}
+      .chara-card.wide{width:300px;}
+      .chara-img{height:210px;}
+      .chara-img img{max-height:190px;}
+      .cta-band{flex-direction:column;align-items:flex-start;gap:20px;padding:32px 16px;}
+      footer{padding:16px;}
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-logo" href="index.html">DXdesign<span>works</span></a>
+    <a class="nav-back" href="index.html">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8L10 4" stroke="#888780" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      アーカイブトップへ戻る
+    </a>
+  </nav>
+
+  <div class="page-header">
+    <div class="page-header-eyebrow">ILLUSTRATION FOR EDUCATION &amp; PUBLISHING</div>
+    <div class="page-header-title">キャラクター紹介</div>
+  </div>
+
+  <!-- DS講座 -->
+  <div class="section">
+    <div class="section-header">
+      <a href="ds.html" class="section-label">DS講座</a>
+      <div class="section-count">4キャラクター</div>
+    </div>
+    <div class="scroll-wrap">
+      <div class="scroll-track">
+
+        <div class="chara-card">
+          <div class="chara-img"><img src="chDS01.webp" alt="Lisa Watanabe"></div>
+          <div class="chara-body">
+            <div class="chara-role">先生</div>
+            <div class="chara-name">Lisa Watanabe</div>
+            <div class="chara-name-sub">リサ ワタナベ</div>
+            <ul class="chara-desc">
+              <li>女性</li>
+              <li>日本人と外国人のハーフ</li>
+              <li>メガネを外す時もある</li>
+              <li>講座での呼び名は「先生」</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chara-card">
+          <div class="chara-img"><img src="chDS02.webp" alt="鈴木碧"></div>
+          <div class="chara-body">
+            <div class="chara-role">生徒A</div>
+            <div class="chara-name">鈴木碧</div>
+            <div class="chara-name-sub">スズキ アオ</div>
+            <ul class="chara-desc">
+              <li>性別不明（実は女性）</li>
+              <li>国籍不明</li>
+              <li>優秀</li>
+              <li>講座での呼び名は「スズキ」</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chara-card">
+          <div class="chara-img"><img src="chDS03.webp" alt="Nguyen Tan Phong"></div>
+          <div class="chara-body">
+            <div class="chara-role">生徒B</div>
+            <div class="chara-name">Nguyen Tan Phong</div>
+            <div class="chara-name-sub">グエン・タン・フォン</div>
+            <ul class="chara-desc">
+              <li>男性</li>
+              <li>ベトナム人</li>
+              <li>普通</li>
+              <li>講座での呼び名は「フォン」</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chara-card">
+          <div class="chara-img"><img src="chDS04.webp" alt="佐藤拓也"></div>
+          <div class="chara-body">
+            <div class="chara-role">生徒C</div>
+            <div class="chara-name">佐藤拓也</div>
+            <div class="chara-name-sub">サトウ タクヤ</div>
+            <ul class="chara-desc">
+              <li>男性</li>
+              <li>日本人</li>
+              <li>ややバカ</li>
+              <li>講座での呼び名は「サトウ」</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- データサイエンス・AIリテラシー講座 -->
+  <div class="section">
+    <div class="section-header">
+      <a href="da.html" class="section-label">データサイエンス・AIリテラシー講座</a>
+      <div class="section-count">7キャラクター</div>
+    </div>
+    <div class="scroll-wrap">
+      <div class="scroll-track">
+
+        <div class="chara-card">
+          <div class="chara-img"><img src="chAD01.webp" alt="カイ7号"></div>
+          <div class="chara-body">
+            <div class="chara-role">ナビゲーター</div>
+            <div class="chara-name">カイ7号</div>
+            <ul class="chara-desc">
+              <li>ヒト型ロボット、性別不明</li>
+              <li>感情的にならない</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chara-card">
+          <div class="chara-img"><img src="chAD02.webp" alt="Aさん"></div>
+          <div class="chara-body">
+            <div class="chara-role">登場人物</div>
+            <div class="chara-name">Aさん</div>
+            <ul class="chara-desc">
+              <li>講座の中で出番が一番多い</li>
+              <li>男女どちらにも見える中性的な設定</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chara-card">
+          <div class="chara-img"><img src="chAD03.webp" alt="ヤス"></div>
+          <div class="chara-body">
+            <div class="chara-role">登場人物</div>
+            <div class="chara-name">ヤス</div>
+            <ul class="chara-desc">
+              <li>ギャンブル好きのダメ人間</li>
+              <li>運動が嫌いでスナック菓子がやめられない</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chara-card">
+          <div class="chara-img"><img src="chAD04.webp" alt="悪者"></div>
+          <div class="chara-body">
+            <div class="chara-role">登場人物</div>
+            <div class="chara-name">悪者</div>
+            <ul class="chara-desc">
+              <li>日本語表現力基礎講座からの持ち越しキャラ</li>
+              <li>猫背が特徴</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chara-card">
+          <div class="chara-img"><img src="chAD05.webp" alt="警官"></div>
+          <div class="chara-body">
+            <div class="chara-role">登場人物</div>
+            <div class="chara-name">警官</div>
+            <ul class="chara-desc">
+              <li>バディでの行動が多い</li>
+              <li>モデルはお笑いコンビのEXIT</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chara-card">
+          <div class="chara-img"><img src="chAD06.webp" alt="偉人"></div>
+          <div class="chara-body">
+            <div class="chara-role">偉人</div>
+            <div class="chara-name">偉人</div>
+            <ul class="chara-desc">
+              <li>ロナルド・フィッシャー</li>
+              <li>ジョン・ネイピア</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chara-card wide">
+          <div class="chara-img"><img src="chAD07.webp" alt="その他の登場人物"></div>
+          <div class="chara-body">
+            <div class="chara-role">その他</div>
+            <div class="chara-name">その他の登場人物</div>
+            <ul class="chara-desc">
+              <li>アパートの大家さんとその住人</li>
+              <li>たまご農家のおじさんなど</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 日本語表現力講座 -->
+  <div class="section">
+    <div class="section-header">
+      <a href="japa.html" class="section-label">日本語表現力講座</a>
+      <div class="section-count">6キャラクター</div>
+    </div>
+    <div class="scroll-wrap">
+      <div class="scroll-track">
+
+        <div class="chara-card">
+          <div class="chara-img"><img src="chN01.webp" alt="マナ"></div>
+          <div class="chara-body">
+            <div class="chara-role">登場人物</div>
+            <div class="chara-name">マナ</div>
+            <ul class="chara-desc">
+              <li>大学3年生</li>
+              <li>几帳面でしっかり者の長女</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chara-card">
+          <div class="chara-img"><img src="chN02.webp" alt="ダイキ"></div>
+          <div class="chara-body">
+            <div class="chara-role">登場人物</div>
+            <div class="chara-name">ダイキ</div>
+            <ul class="chara-desc">
+              <li>マナとは高校の同級生</li>
+              <li>向上心が強く時間に正確</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chara-card">
+          <div class="chara-img"><img src="chN03.webp" alt="マサオ"></div>
+          <div class="chara-body">
+            <div class="chara-role">登場人物</div>
+            <div class="chara-name">マサオ</div>
+            <ul class="chara-desc">
+              <li>好奇心旺盛で社交的</li>
+              <li>うっかりミスが多いお調子者</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chara-card">
+          <div class="chara-img"><img src="chN04.webp" alt="ミサキ"></div>
+          <div class="chara-body">
+            <div class="chara-role">登場人物</div>
+            <div class="chara-name">ミサキ</div>
+            <ul class="chara-desc">
+              <li>帰国子女、みんなより年上</li>
+              <li>フレンドリーで大胆な性格</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chara-card">
+          <div class="chara-img"><img src="chN05.webp" alt="成田先生"></div>
+          <div class="chara-body">
+            <div class="chara-role">先生</div>
+            <div class="chara-name">成田先生</div>
+            <ul class="chara-desc">
+              <li>日本語表現力基礎講座の先生</li>
+              <li>分かりやすい解説で若者に人気</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chara-card wide">
+          <div class="chara-img"><img src="chN06.webp" alt="スマッピー"></div>
+          <div class="chara-body">
+            <div class="chara-role">ナビゲーター</div>
+            <div class="chara-name">スマッピー</div>
+            <ul class="chara-desc">
+              <li>日本語表現力基礎講座のナビゲーター</li>
+              <li>大抵の事は説明できる</li>
+              <li>表情豊かだが、動きが単調</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 情報基礎講座 -->
+  <div class="section">
+    <div class="section-header">
+      <a href="kiso.html" class="section-label">情報基礎講座</a>
+      <div class="section-count">3キャラクター</div>
+    </div>
+    <p style="font-size:12px;color:#888780;padding:0 32px;margin-bottom:20px;">日本語表現力基礎講座からの持ち越しキャラクターが多い</p>
+    <div class="scroll-wrap">
+      <div class="scroll-track">
+
+        <div class="chara-card">
+          <div class="chara-img"><img src="chJ01.webp" alt="アナウンサー"></div>
+          <div class="chara-body">
+            <div class="chara-role">登場人物</div>
+            <div class="chara-name">アナウンサー</div>
+            <ul class="chara-desc">
+              <li>交通情報、株価情報などに登場</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chara-card">
+          <div class="chara-img"><img src="chJ02.webp" alt="偉人"></div>
+          <div class="chara-body">
+            <div class="chara-role">偉人</div>
+            <div class="chara-name">偉人</div>
+            <ul class="chara-desc">
+              <li>グラフを持つナイチンゲール</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chara-card wide">
+          <div class="chara-img"><img src="chJ03.webp" alt="その他の登場人物"></div>
+          <div class="chara-body">
+            <div class="chara-role">その他</div>
+            <div class="chara-name">その他の登場人物</div>
+            <ul class="chara-desc">
+              <li>億万長者と農民</li>
+              <li>職人などの市民</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-band">
+    <div>
+      <div class="cta-band-title">作品のご利用・ご依頼はこちら</div>
+      <div class="cta-band-sub">新規のデジタル教材向けのイラスト制作を承っています。<br>お気軽にご相談ください。</div>
+    </div>
+    <button class="cta-btn">お問い合わせフォームへ</button>
+  </div>
+
+  <footer>
+    <div></div>
+    <div style="font-size:12px;color:#B4B2A9;">© 2026 DX design</div>
+  </footer>
+
+</body>
+</html>
