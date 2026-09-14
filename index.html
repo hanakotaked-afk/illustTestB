@@ -1,0 +1,112 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.page{background:#FAFAF9;font-family:var(--font-sans);width:100%;}
+.ann{display:flex;align-items:center;gap:8px;padding:6px 12px;background:#FFFEF5;border-left:3px solid #D4A843;border-radius:0 6px 6px 0;margin:0 32px;}
+.ann-text{font-size:11px;color:#633806;}
+.sec-band{background:#EEEDFE;padding:6px 32px;margin-top:16px;display:flex;align-items:center;gap:8px;}
+.sec-band span{font-size:11px;font-weight:500;color:#3C3489;}
+.gc:hover{border-color:#AFA9EC !important;}
+
+/* 共通：サムネイル画像付きカードの影・ホバーアニメーション設定 */
+.gc-thumb {
+  background: #FFFFFF;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.gc-thumb:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(83, 74, 183, 0.15);
+}
+</style>
+
+<div class="page">
+ <nav style="display:flex;align-items:center;justify-content:space-between;padding:18px 32px;background:#FAFAF9;border-bottom:0.5px solid #E8E6E0;">
+    <div style="font-size:16px;font-weight:500;color:#2C2C2A;letter-spacing:-0.01em;">DXdesign<span style="color:#534AB7;">works</span></div>
+  </nav>
+
+  <div style="padding:64px 32px;border-bottom:0.5px solid #E8E6E0;">
+
+    <div style="margin-bottom:36px;">
+      <div style="font-size:11px;font-weight:500;letter-spacing:0.1em;color:#534AB7;margin-bottom:10px;">ILLUSTRATION FOR EDUCATION &amp; PUBLISHING</div>
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;">
+        <div style="font-size:28px;font-weight:500;color:#2C2C2A;letter-spacing:-0.02em;line-height:1.2;">NLC講座イラストアーカイブ</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px;">
+      
+      <a href="ds.html" class="gc-thumb" style="padding:12px;cursor:pointer;display:flex;flex-direction:column;gap:12px;text-decoration:none;">
+        <div style="background:url('th01.webp') no-repeat center/cover;border-radius:10px;height:180px;display:flex;align-items:flex-start;padding:12px;">
+          <i class="ti ti-microscope" style="font-size:24px;color:#3C3489;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.15));" aria-hidden="true"></i>
+        </div>
+        <div style="padding:0 4px 6px 4px;">
+          <div style="font-size:16px;font-weight:500;color:#444441;">DS講座</div>
+        </div>
+      </a>
+
+      <a href="da.html" class="gc-thumb" style="padding:12px;cursor:pointer;display:flex;flex-direction:column;gap:12px;text-decoration:none;">
+        <div style="background:url('th04.webp') no-repeat center/cover;border-radius:10px;height:180px;display:flex;align-items:flex-start;padding:12px;">
+          <i class="ti ti-plant" style="font-size:24px;color:#27500A;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.15));" aria-hidden="true"></i>
+        </div>
+        <div style="padding:0 4px 6px 4px;">
+          <div style="font-size:16px;font-weight:500;color:#444441;">DS・AIリテラシー講座</div>
+        </div>
+      </a>
+
+      <a href="japa.html" class="gc-thumb" style="padding:12px;cursor:pointer;display:flex;flex-direction:column;gap:12px;text-decoration:none;">
+        <div style="background:url('th03.webp') no-repeat center/cover;border-radius:10px;height:180px;display:flex;align-items:flex-start;padding:12px;">
+          <i class="ti ti-book" style="font-size:24px;color:#444441;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.15));" aria-hidden="true"></i>
+        </div>
+        <div style="padding:0 4px 6px 4px;">
+          <div style="font-size:16px;font-weight:500;color:#444441;">日本語表現力講座</div>
+        </div>
+      </a>
+
+      <a href="kiso.html" class="gc-thumb" style="padding:12px;cursor:pointer;display:flex;flex-direction:column;gap:12px;text-decoration:none;">
+        <div style="background:url('th02.webp') no-repeat center/cover;border-radius:10px;height:180px;display:flex;align-items:flex-start;padding:12px;">
+          <i class="ti ti-device-tablet" style="font-size:24px;color:#0C447C;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.15));" aria-hidden="true"></i>
+        </div>
+        <div style="padding:0 4px 6px 4px;">
+          <div style="font-size:16px;font-weight:500;color:#444441;">情報基礎講座</div>
+        </div>
+      </a>
+
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;">
+      <a href="kangoill.html" class="gc" style="background:#F0EFED;border-radius:14px;padding:22px 28px;cursor:pointer;display:flex;align-items:center;gap:18px;border:0.5px solid transparent;text-decoration:none;">
+        <div style="width:44px;height:44px;border-radius:10px;background:#555451;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 9H14M14 9L9.5 4.5M14 9L9.5 13.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <div style="font-size:15px;font-weight:500;color:#444441;margin-bottom:4px;">看護講座イラスト</div>
+        </div>
+      </a>
+      <a href="chara.html" class="gc" style="background:#F0EFED;border-radius:14px;padding:22px 28px;cursor:pointer;display:flex;align-items:center;gap:18px;border:0.5px solid transparent;text-decoration:none;">
+        <div style="width:44px;height:44px;border-radius:10px;background:#555451;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 9H14M14 9L9.5 4.5M14 9L9.5 13.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <div style="font-size:15px;font-weight:500;color:#444441;margin-bottom:4px;">キャラクター紹介</div>
+        </div>
+      </a>
+    </div>
+
+  </div>
+
+  <div style="padding:48px 32px;background:#2C2C2A;display:flex;align-items:center;justify-content:space-between;">
+    <div>
+      <div style="font-size:20px;font-weight:500;color:#F1EFE8;margin-bottom:6px;">作品のご利用・ご依頼はこちら</div>
+      <div style="font-size:13px;color:#888780;line-height:1.6;">新規のデジタル教材向けのイラスト制作を承っています。<br>お気軽にご相談ください。</div>
+    </div>
+    <div style="font-size:13px;font-weight:500;padding:12px 28px;background:#534AB7;color:#EEEDFE;border-radius:8px;cursor:pointer;white-space:nowrap;">お問い合わせフォームへ</div>
+  </div>
+
+  <footer style="padding:24px 32px;display:flex;align-items:center;justify-content:space-between;border-top:0.5px solid #E8E6E0;background:#FAFAF9;">
+    <div style="display:flex;gap:20px;">
+    </div>
+    <div style="font-size:12px;color:#B4B2A9;">© 2026 DX design</div>
+  </footer>
+
+</div>
